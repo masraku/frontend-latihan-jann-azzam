@@ -8,9 +8,10 @@ export default function AdminError({ error, retry }: { error: unknown; retry: ()
   }, [error])
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+    // padding & lebar sudah diatur app/admin/layout.tsx (error.tsx tampil di dalam layout, sidebar tetap ada)
+    <main className="py-8">
       <div className="mx-auto max-w-md rounded-xl border border-red-200 bg-white p-8 text-center shadow-sm">
-        <h1 className="mb-2 text-xl font-bold text-red-600">Dashboard admin gagal dimuat</h1>
+        <h1 className="mb-2 text-xl font-bold text-red-600">Halaman admin gagal dimuat</h1>
         <p className="mb-6 text-gray-600">Server sedang tidak bisa dihubungi. Silakan coba beberapa saat lagi.</p>
         <button
           onClick={() => retry()}

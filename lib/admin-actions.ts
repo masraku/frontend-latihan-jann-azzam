@@ -3,36 +3,36 @@
 import { redirect } from 'next/navigation'
 import { fetchDenganToken } from './api-token'
 
-// Setelah aksi selesai, kembali ke /admin membawa pesan
+// Setelah aksi selesai, kembali ke halaman asal (tujuan) membawa pesan
 // (mirip ->with('pesan', ...) dan ->with('error', ...) di Laravel)
-function kembaliKeDashboard(res: Response, message: string | undefined): never {
+function kembaliKe(tujuan: string, res: Response, message: string | undefined): never {
   if (res.status === 401) redirect('/login')
 
   const kunci = res.ok ? 'pesan' : 'error'
   const isi = message ?? (res.status === 403 ? 'Anda tidak punya izin untuk aksi ini.' : 'Terjadi kesalahan.')
 
-  redirect(`/admin?${new URLSearchParams({ [kunci]: isi })}`)
+  redirect(`${tujuan}?${new URLSearchParams({ [kunci]: isi })}`)
 }
 
-async function kirim(path: string, method: string): Promise<never> {
+async function kirim(path: string, method: string, tujuan: string): Promise<never> {
   const res = await fetchDenganToken(path, { method })
   const json = await res.json().catch(() => ({}))
-  kembaliKeDashboard(res, json.message)
+  kembaliKe(tujuan, res, json.message)
 }
 
 // ===== Aksi tombol di tabel =====
 // id dikirim lewat .bind(null, id) dari komponen, bukan dari isi form
 
 export async function toggleStatusUser(id: number) {
-  await kirim(`/admin/users/${id}/status`, 'PATCH')
+  await kirim(`/admin/users/${id}/status`, 'PATCH', '/admin/users')
 }
 
 export async function hapusUser(id: number) {
-  await kirim(`/admin/users/${id}`, 'DELETE')
+  await kirim(`/admin/users/${id}`, 'DELETE', '/admin/users')
 }
 
 export async function toggleStatusProduk(id: number) {
-  await kirim(`/admin/produk/${id}/status`, 'PATCH')
+  await kirim(`/admin/produk/${id}/status`, 'PATCH', '/admin/toko')
 }
 
 // ===== Form tambah / edit user =====
@@ -97,5 +97,5 @@ export async function simpanUser(
     }
   }
 
-  redirect(`/admin?${new URLSearchParams({ pesan: json.message })}`)
+  redirect(`/admin/users?${new URLSearchParams({ pesan: json.message })}`)
 }

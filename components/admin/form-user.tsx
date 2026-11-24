@@ -116,7 +116,7 @@ export default function FormUser({ aksi, nilaiAwal, roles, modeEdit }: Props) {
         >
           {pending ? 'Menyimpan...' : modeEdit ? 'Simpan Perubahan' : 'Tambah User'}
         </button>
-        <Link href="/admin" className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100">
+        <Link href="/admin/users" className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-100">
           Batal
         </Link>
       </div>

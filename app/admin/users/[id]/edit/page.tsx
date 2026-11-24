@@ -15,7 +15,7 @@ type Params = Promise<{ id: string }>
 
 export default function EditUserPage({ params }: { params: Params }) {
   return (
-    <main className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
+    <main className="max-w-2xl">
       <h1 className="mb-6 text-3xl font-bold tracking-tight">Edit User</h1>
       <Suspense fallback={<div className="h-96 animate-pulse rounded-xl bg-gray-100" />}>
         <IsiForm params={params} />

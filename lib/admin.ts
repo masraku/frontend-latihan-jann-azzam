@@ -35,7 +35,7 @@ export type Role = {
 
 // ===== Pengambil data =====
 
-async function ambilDariApi<T>(path: string): Promise<T> {
+export async function ambilDariApi<T>(path: string): Promise<T> {
   const res = await fetchDenganToken(path)
 
   if (res.status === 401) redirect('/login') // token kedaluwarsa / dicabut

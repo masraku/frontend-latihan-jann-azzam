@@ -11,7 +11,7 @@ export async function fetchDenganToken(path: string, init: RequestInit = {}): Pr
     ...init,
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      ...(typeof init.body === 'string' ? { 'Content-Type': 'application/json' } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...init.headers,
     },

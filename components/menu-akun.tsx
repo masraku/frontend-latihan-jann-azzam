@@ -26,6 +26,14 @@ export default async function MenuAkun() {
           Admin
         </Link>
       )}
+      {punyaIzin(user, 'produk.create') && (
+        <Link
+          href="/seller"
+          className="rounded-full px-2.5 py-2 text-sm font-medium text-gray-700 sm:px-4 transition hover:bg-gray-100"
+        >
+          Toko Saya
+        </Link>
+      )}
       <Link
         href="/akun"
         className="rounded-full px-2.5 py-2 text-sm font-medium text-gray-700 sm:px-4 transition hover:bg-gray-100"

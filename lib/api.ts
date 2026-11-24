@@ -12,6 +12,7 @@ export type Produk = {
   nama: string
   harga: number
   stok: number
+  is_active: boolean
   foto_url: string | null
   kategori: Kategori[]
   toko: { id: number; nama: string }
