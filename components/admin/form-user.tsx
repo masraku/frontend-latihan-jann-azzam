@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useActionState, useId } from 'react'
+import { useActionState, useId, useState } from 'react'
 import type { NilaiFormUser, StateFormUser } from '@/lib/admin-actions'
 import type { Role } from '@/lib/admin'
 
@@ -18,6 +18,68 @@ const gayaInput =
 function PesanError({ pesan }: { pesan?: string[] }) {
   if (!pesan?.length) return null
   return <p className="text-xs text-red-600">{pesan[0]}</p>
+}
+
+type PropsRoleDanToko = {
+  nilai: NilaiFormUser
+  errors: StateFormUser['errors']
+  roles: Role[]
+  id: (nama: string) => string
+}
+
+// Nama Toko hanya bisa diisi kalau role yang dipilih = seller.
+// Dibuat komponen terpisah dan diletakkan DI DALAM <form key=...>, supaya
+// useState-nya ikut diulang dari nilai terbaru setiap kali form dikirim.
+function RoleDanToko({ nilai, errors, roles, id }: PropsRoleDanToko) {
+  const [idRole, setIdRole] = useState(nilai.id_role)
+  const [namaToko, setNamaToko] = useState(nilai.nama_toko)
+
+  const idRoleSeller = roles.find((role) => role.nama === 'seller')?.id
+  const seller = idRole !== '' && idRole === String(idRoleSeller)
+
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      <div className="space-y-1">
+        <label htmlFor={id('id_role')} className="text-sm font-medium text-gray-700">Role</label>
+        <select
+          id={id('id_role')}
+          name="id_role"
+          required
+          value={idRole}
+          onChange={(e) => setIdRole(e.target.value)}
+          aria-invalid={!!errors.id_role}
+          className={gayaInput}
+        >
+          <option value="">-- pilih role --</option>
+          {roles.map((role) => (
+            <option key={role.id} value={role.id} className="capitalize">
+              {role.nama}
+            </option>
+          ))}
+        </select>
+        <PesanError pesan={errors.id_role} />
+      </div>
+
+      <div className="space-y-1">
+        <label htmlFor={id('nama_toko')} className="text-sm font-medium text-gray-700">
+          Nama Toko <span className="font-normal text-gray-400">(khusus seller)</span>
+        </label>
+        {/* disabled → tidak ikut terkirim di FormData → simpanUser mengirim nama_toko: null.
+            Teks yang sudah diketik disimpan di state, jadi muncul lagi kalau role dikembalikan ke seller. */}
+        <input
+          id={id('nama_toko')}
+          name="nama_toko"
+          disabled={!seller}
+          value={seller ? namaToko : ''}
+          onChange={(e) => setNamaToko(e.target.value)}
+          placeholder={seller ? '' : 'Pilih role seller dulu'}
+          aria-invalid={!!errors.nama_toko}
+          className={`${gayaInput} disabled:cursor-not-allowed disabled:bg-gray-100`}
+        />
+        <PesanError pesan={errors.nama_toko} />
+      </div>
+    </div>
+  )
 }
 
 export default function FormUser({ aksi, nilaiAwal, roles, modeEdit }: Props) {
@@ -56,28 +118,7 @@ export default function FormUser({ aksi, nilaiAwal, roles, modeEdit }: Props) {
         <PesanError pesan={errors.email} />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1">
-          <label htmlFor={id('id_role')} className="text-sm font-medium text-gray-700">Role</label>
-          <select id={id('id_role')} name="id_role" required defaultValue={nilai.id_role} aria-invalid={!!errors.id_role} className={gayaInput}>
-            <option value="">-- pilih role --</option>
-            {roles.map((role) => (
-              <option key={role.id} value={role.id} className="capitalize">
-                {role.nama}
-              </option>
-            ))}
-          </select>
-          <PesanError pesan={errors.id_role} />
-        </div>
-
-        <div className="space-y-1">
-          <label htmlFor={id('nama_toko')} className="text-sm font-medium text-gray-700">
-            Nama Toko <span className="font-normal text-gray-400">(khusus seller)</span>
-          </label>
-          <input id={id('nama_toko')} name="nama_toko" defaultValue={nilai.nama_toko} aria-invalid={!!errors.nama_toko} className={gayaInput} />
-          <PesanError pesan={errors.nama_toko} />
-        </div>
-      </div>
+      <RoleDanToko nilai={nilai} errors={errors} roles={roles} id={id} />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1">
