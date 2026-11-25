@@ -12,6 +12,19 @@ export type StateLogin = {
   email: string
 }
 
+function halamanAwal(role: string | null): string {
+  if ( role === 'admin' ) {
+    return '/admin'
+  }
+  if ( role === 'seller' ) {
+    return '/seller'
+  }
+  if ( role === 'buyer' ) {
+    return '/buyer'
+  }
+  return '/akun'
+}
+
 export async function masuk(_stateSebelumnya: StateLogin, formData: FormData): Promise<StateLogin> {
   const email = String(formData.get('email') ?? '')
   const password = String(formData.get('password') ?? '')
@@ -51,7 +64,7 @@ export async function masuk(_stateSebelumnya: StateLogin, formData: FormData): P
   })
 
   // redirect() harus di luar try/catch, karena cara kerjanya dengan "melempar" error khusus
-  redirect('/akun')
+  redirect(halamanAwal(json.user.role))
 }
 
 export async function keluar() {

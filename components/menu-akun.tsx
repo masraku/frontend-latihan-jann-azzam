@@ -34,6 +34,14 @@ export default async function MenuAkun() {
           Toko Saya
         </Link>
       )}
+      {user.role === 'buyer' && (
+        <Link
+          href="/buyer"
+          className="rounded-full px-2.5 py-2 text-sm font-medium text-gray-700 sm:px-4 transition hover:bg-gray-100"
+        >
+          Belanja
+        </Link>
+      )}
       <Link
         href="/akun"
         className="rounded-full px-2.5 py-2 text-sm font-medium text-gray-700 sm:px-4 transition hover:bg-gray-100"
