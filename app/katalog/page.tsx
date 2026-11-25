@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import KatalogSkeleton from '@/components/katalog-skeleton'
-import Katalog from './katalog'
+import Katalog from '@/components/katalog'
 
 export const metadata = {
   title: 'Katalog Produk',
@@ -18,7 +18,7 @@ export default function KatalogPage({ searchParams }: { searchParams: SearchPara
 
       {/* Wajib Suspense: isi katalog membaca searchParams dan mengambil data dari Laravel */}
       <Suspense fallback={<KatalogSkeleton />}>
-        <Katalog searchParams={searchParams} />
+        <Katalog searchParams={searchParams} alamat="/katalog" />
       </Suspense>
     </main>
   )

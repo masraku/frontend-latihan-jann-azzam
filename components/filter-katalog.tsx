@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Kategori } from '@/lib/api'
 
 type Props = {
+  alamat: string // tujuan Form dan link Reset
   cari: string
   kategori: string
   urut: string
@@ -12,11 +13,11 @@ type Props = {
 const gayaInput =
   'rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20'
 
-export default function FilterKatalog({ cari, kategori, urut, daftarKategori }: Props) {
+export default function FilterKatalog({ alamat, cari, kategori, urut, daftarKategori }: Props) {
   return (
     // <Form> dari next/form: isian berubah jadi ?cari=...&kategori=... tanpa memuat ulang halaman
     <Form
-      action="/katalog"
+      action={alamat}
       className="mb-6 grid gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:grid-cols-[1fr_auto_auto_auto]"
     >
       <input
@@ -50,7 +51,7 @@ export default function FilterKatalog({ cari, kategori, urut, daftarKategori }: 
           Terapkan
         </button>
         <Link
-          href="/katalog"
+          href={alamat}
           className="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
         >
           Reset

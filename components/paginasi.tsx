@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 type Props = {
+  alamat: string // halaman tujuan saat pindah halaman
   halamanSekarang: number
   halamanTerakhir: number
   params: URLSearchParams // filter yang sedang aktif, supaya ikut terbawa saat pindah halaman
@@ -9,13 +10,13 @@ type Props = {
 const gayaTombol =
   'rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50'
 
-export default function Paginasi({ halamanSekarang, halamanTerakhir, params }: Props) {
+export default function Paginasi({ alamat, halamanSekarang, halamanTerakhir, params }: Props) {
   if (halamanTerakhir <= 1) return null
 
   function urlHalaman(nomor: number): string {
     const p = new URLSearchParams(params)
     p.set('page', String(nomor))
-    return `/katalog?${p}`
+    return `${alamat}?${p}`
   }
 
   return (

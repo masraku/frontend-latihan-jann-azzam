@@ -5,13 +5,18 @@ import { ambilKategori, ambilProduk } from '@/lib/api'
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 
+type Props = {
+  searchParams: SearchParams
+  alamat: string // halaman tempat katalog ini dipasang, mis. '/katalog' atau '/buyer'
+}
+
 // ?kategori=1&kategori=2 menghasilkan array, jadi ambil yang pertama saja
 function ambilSatu(nilai: string | string[] | undefined): string {
   if (Array.isArray(nilai)) return nilai[0] ?? ''
   return nilai ?? ''
 }
 
-export default async function Katalog({ searchParams }: { searchParams: SearchParams }) {
+export default async function Katalog({ searchParams, alamat }: Props) {
   const sp = await searchParams
   const cari = ambilSatu(sp.cari)
   const kategori = ambilSatu(sp.kategori)
@@ -30,7 +35,13 @@ export default async function Katalog({ searchParams }: { searchParams: SearchPa
 
   return (
     <>
-      <FilterKatalog cari={cari} kategori={kategori} urut={urut} daftarKategori={daftarKategori} />
+      <FilterKatalog
+        alamat={alamat}
+        cari={cari}
+        kategori={kategori}
+        urut={urut}
+        daftarKategori={daftarKategori}
+      />
 
       <p className="mb-4 text-sm text-gray-600">
         <span className="font-semibold text-gray-900">{meta.total}</span> produk ditemukan
@@ -49,7 +60,12 @@ export default async function Katalog({ searchParams }: { searchParams: SearchPa
         </div>
       )}
 
-      <Paginasi halamanSekarang={meta.current_page} halamanTerakhir={meta.last_page} params={params} />
+      <Paginasi
+        alamat={alamat}
+        halamanSekarang={meta.current_page}
+        halamanTerakhir={meta.last_page}
+        params={params}
+      />
     </>
   )
 }
